@@ -16,6 +16,7 @@ class _SearchQueryState extends State<SearchQueryWidget> {
   final FileSearchRequest _request = FileSearchRequest();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _pathFormFieldController = TextEditingController(text: '');
+  final TextEditingController _searchQueryFieldController = TextEditingController(text: '');
   final FileSearchService _fileSearchService = FileSearchService();
 
   @override
@@ -39,12 +40,13 @@ class _SearchQueryState extends State<SearchQueryWidget> {
                       Flexible(
                         child: TextFormField(
                           validator: (value) => _validateFormField(value, 'Please enter a search query'),
+                          initialValue: _request.searchTerm,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Enter your search query (either a file name or string)',
                             labelText: 'Query'
                           ),
-                          onSaved: (String? value) {
+                          onChanged: (String? value) {
                             _request.searchTerm = value!;
                           },
                         )

@@ -8,10 +8,12 @@ class FileSearchService {
   Future<List<FileSearchResult>> searchFiles(FileSearchRequest fileSearchRequest) async {
     final Directory directory = Directory(fileSearchRequest.basePath);
     final List<FileSearchResult> result = [];
+    final parsedSearchRequest = _removeSpecialCharactersFromString(fileSearchRequest.searchTerm);
+    print(parsedSearchRequest);
 
     if(await directory.exists()) {
 
-      List<String> testData = ['.cs'];
+      List<String> testData = ['.ts'];
       final allFiles = directory.listSync(recursive: true, followLinks: true);
 
       for (var file in allFiles) {
@@ -20,30 +22,55 @@ class FileSearchService {
           var fileShouldBeIncluded = testData.contains(fileExtension);
 
           if(fileShouldBeIncluded) {
-            var flattenedFileName = file.path.substring(file.path.lastIndexOf('\\'));
-            var searchFoundInFileName = flattenedFileName.contains(fileSearchRequest.searchTerm);
+            var parsedFileName = _removeSpecialCharactersFromString(file.path.substring(file.path.lastIndexOf('\\')));
+            var searchFoundInFileName = parsedSearchRequest != '' && parsedSearchRequest.contains(parsedFileName);
 
             if (searchFoundInFileName) {
               var searchResult = FileSearchResult();
               searchResult.filePath = file.path;
               searchResult.matchType = 'File Name';
+              searchResult.fileName = file.path.substring(file.path.lastIndexOf('\\'));
 
               result.add(searchResult);
             }
 
+            if(await _fileContainsSearchQuery(fileSearchRequest.searchTerm, file)) {
+              var searchResult = FileSearchResult();
+              searchResult.filePath = file.path;
+              searchResult.matchType = 'File';
+              searchResult.fileName = file.path.substring(file.path.lastIndexOf('\\'));
 
+              result.add(searchResult);
+            }
           }
         } on RangeError catch (_, rangeError) {
           continue;
         }
       }
     }
-    
-    result.forEach((element) {print(element.filePath); });
-    
+
+    for (var value in result) {
+      print(value.fileName);
+      print(value.matchType);
+    }
+
     return result;
   }
 
+  Future<bool> _fileContainsSearchQuery(String searchQuery, FileSystemEntity file) async {
+    String parsedFile = await File(file.path).readAsString();
 
+    if(searchQuery == '') {
+      return false;
+    }
+
+    return parsedFile.contains(searchQuery);
+  }
+  
+  String _removeSpecialCharactersFromString(String query) {
+    return query
+      .replaceAll(RegExp('[^A-Za-z0-9]'), '')
+      .toLowerCase();
+  }
 
 }
