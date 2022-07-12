@@ -2,6 +2,8 @@ import 'package:file_finder/models/file_search_request.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
+import '../services/file_search_service.dart';
+
 class SearchQueryWidget extends StatefulWidget {
   const SearchQueryWidget({Key? key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class _SearchQueryState extends State<SearchQueryWidget> {
   final FileSearchRequest _request = FileSearchRequest();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _pathFormFieldController = TextEditingController(text: '');
+  final FileSearchService _fileSearchService = FileSearchService();
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +77,7 @@ class _SearchQueryState extends State<SearchQueryWidget> {
                       ),
                       const Padding(padding: EdgeInsets.only(bottom: 16.0)),
                       ElevatedButton(
-                        onPressed: () => print('Hello'),
+                        onPressed: () => submitForm(),
                         child: const Text('Search')
                       )
                     ],
@@ -95,7 +98,7 @@ class _SearchQueryState extends State<SearchQueryWidget> {
   }
 
   void submitForm() {
-
+    _fileSearchService.searchFiles(_request);
   }
 
   void selectDirectoryToSearch() async {
