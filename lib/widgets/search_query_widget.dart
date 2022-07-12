@@ -9,11 +9,14 @@ class SearchQueryWidget extends StatefulWidget {
 }
 
 class _SearchQueryState extends State<SearchQueryWidget> {
-  final FileSearchRequest request = FileSearchRequest();
+
+  final FileSearchRequest _request = FileSearchRequest();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Card(
@@ -27,14 +30,38 @@ class _SearchQueryState extends State<SearchQueryWidget> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Text('File Search', textScaleFactor: 3.00),
+                      const Padding(padding: EdgeInsets.only(bottom: 16.0)),
                       Flexible(
                         child: TextFormField(
                           validator: (value) => _validateFormField(value, 'Please enter a search query'),
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: 'Enter your search query (either a file name or string)'
+                            hintText: 'Enter your search query (either a file name or string)',
+                            labelText: 'Query'
                           ),
+                          onSaved: (String? value) {
+                            _request.searchTerm = value!;
+                          },
                         )
+                      ),
+                      const Padding(padding: EdgeInsets.only(bottom: 16.0)),
+                      Flexible(
+                          child: TextFormField(
+                            validator: (value) => _validateFormField(value, 'Please enter a search query'),
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: 'Enter the path you want to query (e.g. C:\\User\\Documents)',
+                                labelText: 'Path'
+                            ),
+                            onSaved: (String? value) {
+                              _request.basePath = value!;
+                            },
+                          )
+                      ),
+                      const Padding(padding: EdgeInsets.only(bottom: 16.0)),
+                      ElevatedButton(
+                        onPressed: () => print('Hello'),
+                        child: const Text('Search')
                       )
                     ],
                   )
@@ -45,6 +72,10 @@ class _SearchQueryState extends State<SearchQueryWidget> {
         ),
       ),
     );
+  }
+
+  void submitForm() {
+
   }
 
   String? _validateFormField(value, String errorMessage) {
