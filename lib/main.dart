@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:file_finder/bloc/file_search_bloc.dart';
+import 'package:file_finder/services/file_search_service.dart';
 import 'package:file_finder/widgets/search_query_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:window_size/window_size.dart';
 
 void main() {
@@ -39,19 +40,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  Future<String> get _localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-
-    return directory.path;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: SearchQueryWidget(),
-      )
+      body: SearchQueryWidget(bloc: FileSearchBloc(FileSearchService()))
     );
   }
 }
