@@ -1,16 +1,26 @@
-# file_finder
+# Flutter File Finder
 
-A new Flutter project.
+### What is? 
 
-## Getting Started
+As a developer, I spend so much time looking through files using an IDE's search feature. These are great
+but what if I need to search through different projects for something? These projects can often be in different languages and 
+frameworks that often require different IDEs... That's a nope from me. 
 
-This project is a starting point for a Flutter application.
+### Flutter File Finder Solves this issue. 
 
-A few resources to get you started if this is your first Flutter project:
+So far, it only allows you to look through the following files: 
+- C# (C Sharp) .cs
+- TypeScript .ts
+- SASS .scss
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Simply because these are the file types I look through the most, feel free to add whatever file type you want though. 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+I will eventually be replacing this with a drop-down list that will incrementally add the file types you want to search against, but this is fine for now. 
+
+### How does it work? 
+
+- It uses [file_picker: ^4.6.1](https://pub.dev/packages/file_picker) to select a path (unless you manually enter the path you want to search against)
+- It iterates through the file system recursively, 
+  - if the file extension matches, check against the query
+    - parse the file for the search query
+

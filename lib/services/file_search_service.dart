@@ -8,8 +8,6 @@ class FileSearchService {
   Future<List<FileSearchResult>> searchFiles(FileSearchRequest fileSearchRequest) async {
     final Directory directory = Directory(fileSearchRequest.basePath);
     final List<FileSearchResult> result = [];
-    final parsedSearchRequest = _removeSpecialCharactersFromString(fileSearchRequest.searchTerm);
-    print(parsedSearchRequest);
 
     if(await directory.exists()) {
 
@@ -22,8 +20,8 @@ class FileSearchService {
           var fileShouldBeIncluded = testData.contains(fileExtension);
 
           if(fileShouldBeIncluded) {
-            var parsedFileName = _removeSpecialCharactersFromString(file.path.substring(file.path.lastIndexOf('\\')));
-            var searchFoundInFileName = parsedSearchRequest != '' && parsedSearchRequest.contains(parsedFileName);
+            var parsedFileName = file.path.substring(file.path.lastIndexOf('\\'));
+            var searchFoundInFileName = parsedFileName.contains(fileSearchRequest.searchTerm);
 
             if (searchFoundInFileName) {
               var searchResult = FileSearchResult();
@@ -65,12 +63,6 @@ class FileSearchService {
     }
 
     return parsedFile.contains(searchQuery);
-  }
-  
-  String _removeSpecialCharactersFromString(String query) {
-    return query
-      .replaceAll(RegExp('[^A-Za-z0-9]'), '')
-      .toLowerCase();
   }
 
 }
