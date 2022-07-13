@@ -1,6 +1,5 @@
-import 'package:file_finder/models/file_search_request.dart';
 import 'package:file_finder/widgets/search_form_widget.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:file_finder/widgets/search_results_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/file_search_bloc.dart';
@@ -23,7 +22,12 @@ class _SearchQueryState extends State<SearchQueryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SearchFormWidget(bloc: bloc);
+    return ListView(
+      children: [
+        SearchFormWidget(bloc: bloc),
+        SearchResultsWidget(bloc: bloc)
+      ],
+    );
   }
 
   @override

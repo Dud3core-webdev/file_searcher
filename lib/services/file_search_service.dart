@@ -11,13 +11,12 @@ class FileSearchService {
 
     if(await directory.exists()) {
 
-      List<String> testData = ['.ts'];
       final allFiles = directory.listSync(recursive: true, followLinks: true);
 
       for (var file in allFiles) {
         try {
           var fileExtension = file.path.substring(file.path.lastIndexOf('.'));
-          var fileShouldBeIncluded = testData.contains(fileExtension);
+          var fileShouldBeIncluded = fileSearchRequest.fileExtensions.contains(fileExtension);
 
           if(fileShouldBeIncluded) {
             var parsedFileName = file.path.substring(file.path.lastIndexOf('\\'));
@@ -45,11 +44,6 @@ class FileSearchService {
           continue;
         }
       }
-    }
-
-    for (var value in result) {
-      print(value.fileName);
-      print(value.matchType);
     }
 
     return result;
