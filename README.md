@@ -1,5 +1,7 @@
 # Flutter File Finder
 
+#### Windows (More OS Support to be added)
+
 ### What is? 
 
 As a developer, I spend so much time looking through files using an IDE's search feature. These are great
