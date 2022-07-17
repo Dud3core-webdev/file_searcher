@@ -9,6 +9,7 @@ class FileSearchBloc implements Bloc<List<FileSearchResult>> {
 
   final FileSearchService _fileSearchService;
   final PublishSubject<List<FileSearchResult>> _subject = PublishSubject<List<FileSearchResult>>();
+  final PublishSubject<bool> _isSearchingSubject = PublishSubject<bool>();
 
   late FileSearchRequest _request = FileSearchRequest();
 
@@ -16,6 +17,7 @@ class FileSearchBloc implements Bloc<List<FileSearchResult>> {
 
   @override
   Stream<List<FileSearchResult>> get all => _subject.stream;
+  Stream<bool> get isLoading => _isSearchingSubject.stream;
 
   set request(FileSearchRequest request) {
     _request = request;
@@ -28,7 +30,15 @@ class FileSearchBloc implements Bloc<List<FileSearchResult>> {
 
   @override
   void update() async {
-    List<FileSearchResult> fileSearchResults = await _fileSearchService.searchFiles(_request);
-    _subject.sink.add(fileSearchResults);
+    _isSearchingSubject.sink.add(true);
+
+    await _fileSearchService.searchFiles(_request)
+      .then((fileSearchResults) => {
+        _subject.sink.add(fileSearchResults),
+        _isSearchingSubject.sink.add(false)
+      })
+      .catchError((error) => {
+        _isSearchingSubject.sink.add(false)
+      });
   }
 }

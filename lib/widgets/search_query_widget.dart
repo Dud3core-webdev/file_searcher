@@ -3,7 +3,6 @@ import 'package:file_finder/widgets/search_results_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/file_search_bloc.dart';
-import '../models/file_search_result.dart';
 
 class SearchQueryWidget extends StatefulWidget {
   final FileSearchBloc bloc;
@@ -22,11 +21,18 @@ class _SearchQueryState extends State<SearchQueryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        SearchFormWidget(bloc: bloc),
-        SearchResultsWidget(bloc: bloc)
-      ],
+    return SafeArea(
+        child: StreamBuilder(
+          stream: bloc.isLoading,
+          builder: (context, AsyncSnapshot<bool> snapshot) {
+            return Column(
+                children: [
+                  SearchFormWidget(bloc: bloc),
+                  SearchResultsWidget(bloc: bloc),
+                ],
+              );
+          },
+        )
     );
   }
 
@@ -34,5 +40,7 @@ class _SearchQueryState extends State<SearchQueryWidget> {
   void dispose() {
     super.dispose();
     _pathFormFieldController.dispose();
+    bloc.dispose();
   }
+
 }

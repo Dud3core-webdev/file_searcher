@@ -10,11 +10,9 @@ class SearchResultsWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _SearchResultsWidget(bloc: bloc);
-
 }
 
 class _SearchResultsWidget extends State<SearchResultsWidget> {
-
   final FileSearchBloc bloc;
 
   _SearchResultsWidget({required this.bloc});
@@ -22,51 +20,38 @@ class _SearchResultsWidget extends State<SearchResultsWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: bloc.all,
-      builder: (context, AsyncSnapshot<List<FileSearchResult>> snapshot) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Card(
-            elevation: 12,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+        stream: bloc.all,
+        builder: (context, AsyncSnapshot<List<FileSearchResult>> snapshot) {
+          return Flexible(
+              child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              elevation: 12,
+              child: ListView(
+                padding: const EdgeInsets.all(16.0),
                 children: [
-                  if(!snapshot.hasData || snapshot.data!.isEmpty)
+                  if (!snapshot.hasData || snapshot.data!.isEmpty)
                     const Text("There are no search results, try a search?"),
-
-                  if(snapshot.hasData)
+                  if (snapshot.hasData)
                     DataTable(
                         columns: const [
-                          DataColumn(label: Text(
-                              'File Name',
-                              style: TextStyle(fontStyle: FontStyle.italic)
-                          )),
-                          DataColumn(label: Text(
-                              'File Path',
-                              style: TextStyle(fontStyle: FontStyle.italic)
-                          )),
-                          DataColumn(label: Text(
-                              'Match Type',
-                              style: TextStyle(fontStyle: FontStyle.italic)
-                          ))
+                          DataColumn(label: Text('File Name', style: TextStyle(fontStyle: FontStyle.italic))),
+                          DataColumn(label: Text('File Path', style: TextStyle(fontStyle: FontStyle.italic))),
                         ],
-                        rows: List<DataRow>.generate(snapshot.data!.length, (index) => DataRow(
-                            cells: [
-                              DataCell(Text(snapshot.data![index].fileName)),
-                              DataCell(Text(snapshot.data![index].filePath)),
-                              DataCell(Text(snapshot.data![index].matchType)),
-                            ]
-                        ))
+                        rows: List<DataRow>.generate(
+                            snapshot.data!.length,
+                            growable: true,
+                            (index) => DataRow(cells: [
+                                  DataCell(Text(snapshot.data![index].fileName)),
+                                  DataCell(Text(snapshot.data![index].filePath)),
+                                ]
+                            )
+                        )
                     )
                 ],
               ),
-            )
-          ),
-        );
-      }
-    );
+            ),
+          ));
+        });
   }
 }
