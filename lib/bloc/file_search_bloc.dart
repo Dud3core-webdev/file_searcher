@@ -13,7 +13,9 @@ class FileSearchBloc implements Bloc<List<FileSearchResult>> {
 
   late FileSearchRequest _request = FileSearchRequest();
 
-  FileSearchBloc(this._fileSearchService);
+  FileSearchBloc(this._fileSearchService) {
+    _isSearchingSubject.sink.add(false);
+  }
 
   @override
   Stream<List<FileSearchResult>> get all => _subject.stream;

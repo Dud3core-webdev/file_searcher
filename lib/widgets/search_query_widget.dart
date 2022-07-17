@@ -1,6 +1,7 @@
 import 'package:file_finder/widgets/search_form_widget.dart';
 import 'package:file_finder/widgets/search_results_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../bloc/file_search_bloc.dart';
 
@@ -28,6 +29,10 @@ class _SearchQueryState extends State<SearchQueryWidget> {
             return Column(
                 children: [
                   SearchFormWidget(bloc: bloc),
+
+                  if(snapshot.hasData && snapshot.data == true)
+                    const SpinKitThreeBounce(color: Colors.black87),
+
                   SearchResultsWidget(bloc: bloc),
                 ],
               );

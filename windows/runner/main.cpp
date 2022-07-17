@@ -26,7 +26,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
 
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
-  Win32Window::Size size(1000, 700);
+  Win32Window::Size size(1024, 900);
   if (!window.CreateAndShow(L"file_finder", origin, size)) {
     return EXIT_FAILURE;
   }
