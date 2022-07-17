@@ -23,21 +23,21 @@ class _SearchQueryState extends State<SearchQueryWidget> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: StreamBuilder(
-          stream: bloc.isLoading,
-          builder: (context, AsyncSnapshot<bool> snapshot) {
-            return Column(
-                children: [
-                  SearchFormWidget(bloc: bloc),
+      child: StreamBuilder(
+        stream: bloc.isLoading,
+        builder: (context, AsyncSnapshot<bool> snapshot) {
+          return Column(
+              children: [
+                SearchFormWidget(bloc: bloc),
 
-                  if(snapshot.hasData && snapshot.data == true)
-                    const SpinKitThreeBounce(color: Colors.black87),
+                if(snapshot.hasData && snapshot.data == true)
+                  const SpinKitThreeBounce(color: Colors.black87),
 
-                  SearchResultsWidget(bloc: bloc),
-                ],
-              );
-          },
-        )
+                SearchResultsWidget(bloc: bloc),
+              ],
+            );
+        },
+      )
     );
   }
 
