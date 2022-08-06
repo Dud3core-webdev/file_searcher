@@ -5,15 +5,9 @@ import 'package:file_finder/constants/theme_data.dart';
 import 'package:file_finder/services/file_search_service.dart';
 import 'package:file_finder/widgets/search_query_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:window_size/window_size.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  if(Platform.isWindows) {
-    setWindowMaxSize(const Size(1024, 900));
-    setWindowMinSize(const Size(700, 750));
-  }
 
   runApp(const MyApp());
 }
