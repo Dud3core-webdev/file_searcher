@@ -6,12 +6,16 @@ import 'package:file_finder/models/file_search_result.dart';
 class FileSearchService {
 
   Future<List<FileSearchResult>> searchFiles(FileSearchRequest fileSearchRequest) async {
+    Stopwatch stopwatch = Stopwatch()..start();
+
     final Directory directory = Directory(fileSearchRequest.basePath);
     final List<FileSearchResult> result = [];
 
     if(await directory.exists()) {
 
-      final allFiles = directory.listSync(recursive: true, followLinks: true);
+      final allFiles = await directory
+        .list(recursive: true, followLinks: true)
+        .toList();
 
       for (var file in allFiles) {
         try {
@@ -45,6 +49,9 @@ class FileSearchService {
         }
       }
     }
+
+    stopwatch.stop();
+    print('Search took ${stopwatch.elapsed}');
 
     return result;
   }

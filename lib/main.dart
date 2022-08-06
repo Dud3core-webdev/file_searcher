@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_finder/bloc/file_search_bloc.dart';
+import 'package:file_finder/constants/theme_data.dart';
 import 'package:file_finder/services/file_search_service.dart';
 import 'package:file_finder/widgets/search_query_widget.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: lightThemeData,
       home: const MyHomePage(title: 'File Finder'),
     );
   }
