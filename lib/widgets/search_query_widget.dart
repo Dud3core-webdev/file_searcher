@@ -29,11 +29,7 @@ class _SearchQueryState extends State<SearchQueryWidget> {
           return Column(
               children: [
                 SearchFormWidget(bloc: bloc),
-
-                if(snapshot.hasData && snapshot.data == true)
-                  const SpinKitThreeBounce(color: Colors.black87),
-
-                SearchResultsWidget(bloc: bloc),
+                SearchResultsWidget(bloc: bloc)
               ],
             );
         },

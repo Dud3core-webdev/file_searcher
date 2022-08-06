@@ -2,6 +2,16 @@
 
 #### Windows (More OS Support to be added)
 
+### Latest updates
+- Started adding a list of file types you can search against rather than checkboxes for just TS, SCSS and C# files 
+- Visual improvements particularly when searching 
+- Reset all search parameters and remove file extensions
+
+### What's next? 
+- The ability to exclude paths and files (Especially useful for web developers and those horrible node_modules directories).
+- Theming 
+  - It's only a search tool - but that doesn't mean it can't be fancy.
+
 ### What is? 
 
 As a developer, I spend so much time looking through files using an IDE's search feature. These are great

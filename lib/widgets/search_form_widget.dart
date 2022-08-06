@@ -16,14 +16,15 @@ class SearchFormWidget extends StatefulWidget {
 
 class _SearchFormWidgetState extends State<SearchFormWidget> {
 
-  final FileSearchRequest _request = FileSearchRequest();
   final FileSearchBloc bloc;
-  final List<DropdownMenuItem<String>> dropdownItems = CommonFileMapper.getDropdownMenuItems();
+
+  final FileSearchRequest _request = FileSearchRequest();
+  final List<DropdownMenuItem<String>> _dropdownItems = CommonFileMapper.getDropdownMenuItems();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _pathFormFieldController = TextEditingController(text: '');
   final TextEditingController _searchQueryFormFieldController = TextEditingController(text: '');
 
-  late String fileExtensionsToSearchAgainst = "";
+  late String _fileExtensionsToSearchAgainst = "";
 
   _SearchFormWidgetState({ required this.bloc });
 
@@ -60,7 +61,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                                 hintText: 'Enter your search query (either a file name or string)',
                                 labelText: 'Query'
                               ),
-                              onChanged: (String? value) => _setSearchQuery(),
+                              onChanged: (String? value) => _setSearchQuery(value!),
                             )
                           ),
                           const Padding(padding: EdgeInsets.only(bottom: 16.0)),
@@ -77,9 +78,9 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                                   decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: 'Enter the path you want to query (e.g. C:\\User\\Documents)',
-                                    labelText: 'Path'
+                                    labelText: 'Path',
+                                    enabled: false
                                   ),
-                                  onChanged: (String? value) => _setSearchBasePath(),
                                 )
                               ),
                             ],
@@ -93,7 +94,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                                 children: [
                                   const Text("Select a File Type to add to the search query (You can select multiple)"),
                                   DropdownButton(
-                                    items: dropdownItems,
+                                    items: _dropdownItems,
                                     icon: const Icon(Icons.keyboard_arrow_down),
                                     onChanged: (String? value) => _onFileTypeSelected(value!)
                                   ),
@@ -104,7 +105,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                                 children: [
                                   const Text("Files you have searched so far"),
                                   const Padding(padding: EdgeInsets.only(bottom: 16.0)),
-                                  Text(fileExtensionsToSearchAgainst)
+                                  Text(_fileExtensionsToSearchAgainst)
                                 ],
                               )
                             ],
@@ -174,16 +175,12 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
 
   void _setFileExtensionsToSearchAgainst() {
     setState(() => {
-      fileExtensionsToSearchAgainst = _request.fileExtensions.toString(),
+      _fileExtensionsToSearchAgainst = _request.fileExtensions.toString(),
     });
   }
 
-  void _setSearchBasePath() {
-    _request.basePath = _pathFormFieldController.text;
-  }
-
-  void _setSearchQuery() {
-    _request.searchTerm = _searchQueryFormFieldController.text;
+  void _setSearchQuery(String value) {
+    _request.searchTerm = value;
   }
 
 }
