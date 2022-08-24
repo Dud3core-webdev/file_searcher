@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:open_file/open_file.dart';
 
 import '../bloc/file_search_bloc.dart';
 import '../models/file_search_result.dart';
@@ -63,14 +64,21 @@ class _SearchResultsWidget extends State<SearchResultsWidget> {
           DataColumn(label: Text('File Path', style: TextStyle(fontStyle: FontStyle.italic))),
         ],
         rows: List<DataRow>.generate(
-            snapshot.data!.length,
-            growable: true,
-                (index) => DataRow(cells: [
-              DataCell(Text(snapshot.data![index].fileName)),
-              DataCell(Text(snapshot.data![index].filePath)),
-            ]
-            )
+          snapshot.data!.length,
+          growable: true, (index) => DataRow(
+          cells: [
+            DataCell(Text(snapshot.data![index].fileName)),
+            DataCell(Text(
+              snapshot.data![index].filePath),
+              onTap: () => openFile(snapshot.data![index].filePath)
+            ),
+          ]
         )
+      )
     );
+  }
+
+  void openFile(String path) {
+    OpenFile.open(path);
   }
 }
