@@ -23,6 +23,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _pathFormFieldController = TextEditingController(text: '');
   final TextEditingController _searchQueryFormFieldController = TextEditingController(text: '');
+  final TextEditingController _subPathExcludeFromSearchController = TextEditingController(text: '');
 
   late String _fileExtensionsToSearchAgainst = "";
 
@@ -83,6 +84,18 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                                   ),
                                 )
                               ),
+                              const Padding(padding: EdgeInsets.only(right: 16.0)),
+                              Flexible(
+                                  child: TextFormField(
+                                    controller: _subPathExcludeFromSearchController,
+                                    validator: (value) => _validateFormField(value, ''),
+                                    decoration: const InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      hintText: 'Sub-directory excludes: e.g node_modules',
+                                      labelText: 'Sub-directories to exclude (Please use comma separated values)',
+                                    ),
+                                  )
+                              ),
                             ],
                           ),
                           const Padding(padding: EdgeInsets.only(bottom: 16.0)),
@@ -133,6 +146,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
   }
 
   void _submitForm() {
+    addSubDirectoriesToIgnoreToRequest();
     bloc.request = _request;
     bloc.update();
   }
@@ -162,6 +176,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
     _request.resetAllSearchParameters();
     _pathFormFieldController.text = "";
     _searchQueryFormFieldController.text = "";
+    _subPathExcludeFromSearchController.text = "";
     _setFileExtensionsToSearchAgainst();
   }
 
@@ -181,6 +196,14 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
 
   void _setSearchQuery(String value) {
     _request.searchTerm = value;
+  }
+
+  void addSubDirectoriesToIgnoreToRequest() {
+    List<String> pathsToExcludeFromSearch = _subPathExcludeFromSearchController.text
+        .replaceAll(' ', "")
+        .split(",");
+
+    _request.bulkAddSubDirectoriesToIgnore(pathsToExcludeFromSearch);
   }
 
 }
