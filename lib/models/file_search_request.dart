@@ -3,6 +3,15 @@ class FileSearchRequest {
   String basePath = '';
   String searchTerm = '';
   List<String> _fileExtensions = [];
+  List<String> _subDirectoriesToIgnore = [];
+
+  List<String> get subDirectoriesToIgnore {
+    return _subDirectoriesToIgnore;
+  }
+
+  void bulkAddSubDirectoriesToIgnore(List<String> request) {
+    _subDirectoriesToIgnore = [..._subDirectoriesToIgnore, ...request];
+  }
 
   List<String> get fileExtensions {
     return _fileExtensions;
@@ -36,9 +45,14 @@ class FileSearchRequest {
     basePath = "";
   }
 
+  void resetSubDirectoriesToIgnore() {
+    _subDirectoriesToIgnore = [];
+  }
+
   void resetAllSearchParameters() {
     resetFileExtensions();
     resetBasePath();
     resetSearchTerm();
+    resetSubDirectoriesToIgnore();
   }
 }

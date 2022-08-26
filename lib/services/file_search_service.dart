@@ -21,6 +21,11 @@ class FileSearchService {
         try {
           var fileExtension = file.path.substring(file.path.lastIndexOf('.'));
           var fileShouldBeIncluded = fileSearchRequest.fileExtensions.contains(fileExtension);
+          var directoryShouldBeIncluded = _shouldDirectoryBeIncluded(file.path, fileSearchRequest.subDirectoriesToIgnore);
+
+          if(!directoryShouldBeIncluded) {
+            continue;
+          }
 
           if(fileShouldBeIncluded) {
             var parsedFileName = file.path.substring(file.path.lastIndexOf('\\'));
@@ -66,4 +71,15 @@ class FileSearchService {
     return parsedFile.contains(searchQuery);
   }
 
+  bool _shouldDirectoryBeIncluded(String path, List<String> excludedSubDirectories) {
+    bool result = true;
+
+    for (var directory in excludedSubDirectories) {
+      if(path.contains(directory)) {
+        result = false;
+      }
+    }
+
+    return result;
+  }
 }
